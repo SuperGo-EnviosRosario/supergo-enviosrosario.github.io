@@ -1,5 +1,16 @@
+<!doctype html>
+<html lang="es-AR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pedí hoy, recibí hoy. Delivery de súper por WhatsApp en Rosario. Envío sin cargo.">
+<meta name="theme-color" content="#1f6b45">
+<meta property="og:type" content="website"><meta property="og:url" content="https://supergo-enviosrosario.github.io/">
+<meta property="og:title" content="SuperGo · Tu súper, sin salir de casa">
+<meta property="og:description" content="Pedí hoy, recibí hoy. Envío sin cargo en Rosario. Mirá los productos y precios y hacé tu pedido por WhatsApp.">
+<meta property="og:image" content="https://supergo-enviosrosario.github.io/img/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_AR"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="img/icon-192.png"><link rel="apple-touch-icon" href="img/icon-180.png"><link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="SuperGo"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>SuperGo · Tu súper a domicilio en Rosario</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>[hidden]{display:none!important}
@@ -26,6 +37,11 @@ header{padding-block:22px 10px}
 .logo span{color:var(--accent)}
 .slogan{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--muted);margin:0}
 .info{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
+.again{max-width:560px;margin:14px auto 0;background:#fff8dc;border:2px solid var(--tag);border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.again p{margin:0;font-weight:600;font-size:.95rem}.again small{display:block;font-weight:500;color:var(--muted)}
+.again button{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;white-space:nowrap;cursor:pointer}
+.links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.links a,.links button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--accent);color:var(--accent);background:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;font-size:.9rem;text-decoration:none;cursor:pointer}
 .info span{background:var(--chip);border-radius:999px;padding:6px 12px;font-size:.85rem;font-weight:600}
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
@@ -104,10 +120,14 @@ label{display:block;font-weight:600;font-size:.88rem;margin-top:12px}
 .empty{color:var(--muted);padding:30px 0;text-align:center}
 @media (prefers-reduced-motion:no-preference){.card{transition:transform .12s}.card:active{transform:scale(.99)}}
 </style>
+</head><body>
+
 
 <header class="wrap">
   <div class="brand"><h1 class="logo"><img src="img/logo.webp" alt="SuperGo. Pedí hoy, recibí hoy"></h1><p class="slogan">Tu súper, sin salir de casa.</p></div>
-  <div class="info"><span>Pedidos hasta las 14 h, entrega en el día</span><span>Zona oeste, Rosario</span><span>Pagás al recibir o por transferencia</span></div>
+  <div class="info"><span>Pedidos hasta las 14 h, entrega en el día</span><span>Envíos sin cargo, zona Rosario</span><span>Pagás al recibir o por transferencia</span></div>
+  <div class="links"><a id="wa" href="#" target="_blank" rel="noopener">💬 ¿Tenés una duda? Escribinos</a><button id="inst" type="button" hidden>📲 Agregar SuperGo a mi celular</button></div>
+  <div class="again" id="again" hidden><p>¿Repetís tu último pedido?<small id="againtxt"></small></p><button type="button" id="repeat">Repetir pedido</button></div>
 </header>
 <nav><div class="wrap"><div class="tabs" id="tabs" role="toolbar" aria-label="Categorías"></div><input id="q" class="search" type="search" placeholder="Buscar producto (yerba, fideos, lavandina…)" aria-label="Buscar producto"></div></nav>
 <main class="wrap" id="list"></main>
@@ -208,6 +228,8 @@ document.addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b) return;
   if(b.dataset.c){cat=b.dataset.c;tabs();render();window.scrollTo({top:0});return}
   if(b.dataset.v){zid=+b.dataset.v;const p=P[zid];$("#zimg").src=p.i;$("#zimg").alt=p.n;$("#zname").textContent=p.n;$("#zprice").textContent=fmt(p.p);zoomctl();$("#zoom").hidden=false;return}
+  if(b.id==="repeat"){let c=0;(LAST.items||[]).forEach(([n,q])=>{const p=P.find(x=>x.n===n);if(p){cart[p.id]=q;c++}});render();$("#again").hidden=true;const ts=$("#toast");ts.textContent=c?"Listo, cargamos tu último pedido. Podés sumar o sacar productos.":"Esos productos ya no están disponibles.";ts.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>ts.hidden=true,3500);return}
+  if(b.id==="inst"){if(window._dp){window._dp.prompt();window._dp=null;$("#inst").hidden=true}return}
   if(b.id==="zclose"){$("#zoom").hidden=true;zid=null;return}
   if(b.dataset.a){cart[b.dataset.a]=(cart[b.dataset.a]||0)+1;render();return}
   if(b.dataset.m){cart[b.dataset.m]=Math.max(0,(cart[b.dataset.m]||0)-1);render();return}
@@ -221,6 +243,7 @@ document.addEventListener("click",e=>{
     req.forEach(([id])=>$("#"+id).classList.toggle("bad",!$("#"+id).value.trim()));
     if(miss.length){const f=$("#faltan");f.textContent="Falta completar: "+miss.map(m=>m[1]).join(", ")+".";f.hidden=false;const el=$("#"+miss[0][0]);el.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>el.focus(),300);return}
     $("#faltan").hidden=true;
+    try{localStorage.setItem("sg_last",JSON.stringify({items:Object.entries(cart).filter(([,n])=>n>0).map(([id,n])=>[P[id].n,n]),nom:$("#nom").value,tel:$("#tel").value,dir:$("#dir").value,pago:$("#pago").value,obs:$("#obs").value}))}catch(e){}
     const url=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message())}`;
     const a=document.createElement("a");a.href=url;a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();return}
   if(b.id==="copy"){
@@ -233,5 +256,14 @@ $("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")$("#sheet").hi
 ["nom","tel","dir","pago"].forEach(id=>$("#"+id).addEventListener(id==="pago"?"change":"input",e=>e.target.classList.remove("bad")));
 $("#q").addEventListener("input",e=>{q=e.target.value;render()});
 $("#open").innerHTML=CART+" Finalizar pedido";
+let LAST={};
+try{LAST=JSON.parse(localStorage.getItem("sg_last")||"{}")||{}}catch(e){LAST={}}
+["nom","tel","dir","pago","obs"].forEach(k=>{if(LAST[k])$("#"+k).value=LAST[k]});
+const avail=(LAST.items||[]).filter(([n])=>P.some(x=>x.n===n));
+if(avail.length){$("#againtxt").textContent=avail.length+(avail.length===1?" producto":" productos")+" · lo podés cambiar antes de enviar";$("#again").hidden=false}
+$("#wa").href=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola SuperGo! Tengo una consulta: ")}`;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();window._dp=e;$("#inst").hidden=false});
 tabs();render();
 </script>
+
+</body></html>
