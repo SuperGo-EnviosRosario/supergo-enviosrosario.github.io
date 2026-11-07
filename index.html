@@ -1,0 +1,237 @@
+<title>SuperGo · Tu súper a domicilio en Rosario</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>[hidden]{display:none!important}
+/* Layout: almacén de barrio en el celular — encabezado con slogan, pestañas de góndola, grilla de productos y barra de pedido fija abajo */
+:root{
+  --bg:#fbfaf6; --surface:#ffffff; --ink:#1d2a22; --muted:#5d6b62; --line:#e4e6dd;
+  --accent:#1f6b45; --accent-ink:#ffffff; --tag:#ffd54a; --tag-ink:#2a2300; --chip:#eef3ec; --go:#e8620f; --go-ink:#ffffff; --off:#d9ddd5; --off-ink:#3d4740;
+  --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111813; --surface:#19221c; --ink:#eaf1ea; --muted:#a3b2a8; --line:#2b372f;
+  --accent:#4fbf83; --accent-ink:#06130b; --tag:#f2c93b; --tag-ink:#1e1800; --chip:#1f2b23; --go:#ff8a3d; --go-ink:#1a0b00; --off:#2f3a33; --off-ink:#c9d3cc; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111813; --surface:#19221c; --ink:#eaf1ea; --muted:#a3b2a8; --line:#2b372f;
+  --accent:#4fbf83; --accent-ink:#06130b; --tag:#f2c93b; --tag-ink:#1e1800; --chip:#1f2b23; --go:#ff8a3d; --go-ink:#1a0b00; --off:#2f3a33; --off-ink:#c9d3cc; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-block:22px 10px}
+.brand{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.logo{margin:0;background:#fff;border-radius:16px;padding:10px 14px;line-height:0;width:100%;display:flex;justify-content:center}.logo img{height:130px;width:auto;max-width:100%;object-fit:contain}
+.logo span{color:var(--accent)}
+.slogan{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--muted);margin:0}
+.info{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
+.info span{background:var(--chip);border-radius:999px;padding:6px 12px;font-size:.85rem;font-weight:600}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 .9rem var(--body);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.search{width:100%;margin-top:4px;margin-bottom:10px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:500 .95rem var(--body)}
+main{padding-block:14px 170px}
+h2{font-family:var(--display);font-weight:800;font-size:1.35rem;margin:18px 0 10px;letter-spacing:-.01em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pic{position:relative;border:0;padding:0;cursor:zoom-in;width:100%;aspect-ratio:1/1;border-radius:10px;background:#fff;display:grid;place-items:center;overflow:hidden;max-width:100%}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.pic .ph{font-family:var(--display);font-weight:800;font-size:2rem;color:#9aa79e}
+.name{font-weight:600;font-size:.92rem;line-height:1.25;min-height:2.5em}
+.row{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:auto}
+.zbox .row{flex-direction:row;align-items:center;justify-content:space-between}
+.price{white-space:nowrap;display:inline-block;background:var(--tag);color:var(--tag-ink);font-weight:700;padding:3px 8px;border-radius:6px;font-variant-numeric:tabular-nums;font-size:.95rem}
+.unit{font-size:.75rem;color:var(--muted)}
+.step{display:flex;align-items:center;gap:6px}
+.step button,.add{border:0;cursor:pointer;font:700 1rem var(--body)}
+.add{background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:9px 12px;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}.zbox .add{width:auto}
+.card .step{justify-content:space-between}.add svg{width:18px;height:18px}
+.step button{width:32px;height:32px;border-radius:10px;background:var(--chip);color:var(--ink)}
+.step b{min-width:1.4em;text-align:center;font-variant-numeric:tabular-nums}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:8;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--surface);border-top:1px solid var(--line)}
+.bar .in{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bar .tot{font-variant-numeric:tabular-nums}
+.bar .tot strong{font-size:1.15rem}
+.cta{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:12px 18px;font:700 1rem var(--body);cursor:pointer}
+.cta:disabled{cursor:default}
+#open{background:var(--go);color:var(--go-ink);font-size:1.05rem;padding:14px 20px;display:inline-flex;align-items:center;gap:8px}#open svg{width:20px;height:20px}
+#open:disabled{background:var(--off);color:var(--off-ink)}
+#open.low{background:var(--off);color:var(--off-ink)}
+#open.ready{background:var(--accent);color:var(--accent-ink)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:25;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;font-weight:600;max-width:min(92vw,420px);text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.send:disabled{background:var(--off);color:var(--off-ink)}
+.prog{max-width:1040px;margin:0 auto 8px;font-size:.88rem;font-weight:600}
+.prog .track{height:8px;border-radius:99px;background:var(--chip);margin-top:5px;overflow:hidden}
+.prog .fill{height:100%;background:var(--go);width:0;transition:width .2s}
+.prog.ok .fill{background:var(--accent)}
+.zoom{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-left,0px))}
+.zbox{background:var(--surface);color:var(--ink);border-radius:18px;padding:16px;width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px}
+.zbox img{width:100%;max-height:60vh;object-fit:contain;background:#fff;border-radius:12px}
+.zbox .zn{font-weight:700;font-size:1.1rem}
+.zbox .row{gap:10px}
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.panel{background:var(--surface);color:var(--ink);width:100%;max-width:560px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.panel h3{font-family:var(--display);font-size:1.3rem;margin:0 0 10px}
+.line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.line span:first-child{min-width:0}
+label{display:block;font-weight:600;font-size:.88rem;margin-top:12px}
+.panel input,.panel textarea,.panel select{width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 .95rem var(--body)}
+.note{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+.warn{background:var(--tag);color:var(--tag-ink);border-radius:10px;padding:8px 10px;font-size:.88rem;font-weight:600;margin-top:10px}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.sendbar{position:sticky;bottom:calc(-18px - env(safe-area-inset-bottom,0px));background:var(--surface);margin:14px -16px calc(-18px - env(safe-area-inset-bottom,0px));padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.sendbar .warn{margin:0}
+.sendrow{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.sendbar .send{font-size:1.05rem;padding:14px 10px}
+.more{background:var(--surface);color:var(--accent);border:2px solid var(--accent);border-radius:12px;padding:12px 10px;font:700 .98rem var(--body);cursor:pointer}
+.xbtn{padding:8px 12px}
+.more.small{padding:12px 14px;font-size:.92rem}
+.sug h4{font-family:var(--display);font-size:1.05rem;margin:16px 0 8px}
+.sugrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sugi{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:6px;min-width:0}
+.sugi img,.sugi .ph{width:44px;height:44px;flex:none;object-fit:contain;background:#fff;border-radius:8px;display:grid;place-items:center;font-weight:800;color:#9aa79e}
+.sugi .t{min-width:0;font-size:.82rem;font-weight:600;line-height:1.2;flex:1}
+.sugi .t span{display:block;color:var(--muted);font-weight:500}
+.sugi button{flex:none;width:34px;height:34px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);font:700 1.2rem var(--body);cursor:pointer}
+.line .q{display:flex;align-items:center;gap:6px;flex:none}
+.line .q button{width:28px;height:28px;border-radius:8px;border:0;background:var(--chip);color:var(--ink);font:700 1rem var(--body);cursor:pointer}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}.phead h3{margin:0}.xbtn{padding:8px 12px}
+.bad{border-color:#d93a2b!important;box-shadow:0 0 0 2px rgba(217,58,43,.25)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:12px 16px;font:600 .95rem var(--body);cursor:pointer}
+.empty{color:var(--muted);padding:30px 0;text-align:center}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .12s}.card:active{transform:scale(.99)}}
+</style>
+
+<header class="wrap">
+  <div class="brand"><h1 class="logo"><img src="img/logo.webp" alt="SuperGo. Pedí hoy, recibí hoy"></h1><p class="slogan">Tu súper, sin salir de casa.</p></div>
+  <div class="info"><span>Pedidos hasta las 14 h, entrega en el día</span><span>Zona oeste, Rosario</span><span>Pagás al recibir o por transferencia</span></div>
+</header>
+<nav><div class="wrap"><div class="tabs" id="tabs" role="toolbar" aria-label="Categorías"></div><input id="q" class="search" type="search" placeholder="Buscar producto (yerba, fideos, lavandina…)" aria-label="Buscar producto"></div></nav>
+<main class="wrap" id="list"></main>
+
+<div class="bar"><div class="prog" id="prog"><span id="progtxt">Pedido mínimo $ 15.000</span><div class="track"><div class="fill" id="fill"></div></div></div><div class="in"><div class="tot"><div id="count">Tu pedido está vacío</div><strong id="total">$ 0</strong></div><button class="cta" id="open" disabled>Ver pedido</button></div></div>
+
+<div class="toast" id="toast" hidden role="status"></div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Producto"><div class="zbox"><img id="zimg" alt=""><div class="zn" id="zname"></div><div class="row"><div><span class="price" id="zprice"></span><div class="unit">por unidad</div></div><div id="zctl"></div></div><button class="ghost" id="zclose" type="button">Cerrar</button></div></div>
+<div class="sheet" id="sheet" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="ttl">
+    <div class="phead"><h3 id="ttl">Tu pedido</h3><button class="more xbtn" id="close2" type="button">+ Sumar productos</button></div>
+    <div id="lines"></div>
+    <div class="line"><strong>Total</strong><strong id="total2">$ 0</strong></div>
+    <div id="sug"></div>
+    <div id="min" class="warn" hidden></div>
+    <label for="nom">Nombre *</label><input id="nom" autocomplete="name" placeholder="Ej: Marta">
+    <label for="tel">Teléfono de contacto *</label><input id="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ej: 341 555-1234">
+    <label for="dir">Tu dirección de entrega *</label><input id="dir" autocomplete="street-address" placeholder="Calle y número de tu casa. Ej: La Paz 4150">
+    <label for="pago">Forma de pago *</label>
+    <select id="pago"><option value="" selected disabled>Elegí cómo vas a pagar</option><option>Efectivo al recibir</option><option>Transferencia</option><option>Mercado Pago</option></select>
+    <label for="obs">¿Cómo encontramos tu casa? (opcional)</label><textarea id="obs" rows="2" placeholder="Ej: pasillo con portón negro, casa blanca de dos pisos, depto 2B, tocar timbre"></textarea>
+    <p class="note">Al enviar se abre WhatsApp con tu pedido escrito. Te confirmamos el total y el horario de entrega.</p>
+    <div class="sendbar"><div class="warn" id="faltan" hidden></div><div class="sendrow"><button class="more small" id="close" type="button">+ Sumar</button><button class="cta send" id="send">Enviar pedido</button></div></div>
+  </div>
+</div>
+
+<script>
+const WHATSAPP = "5493416747854"; // número de SuperGo con código de país, sin + ni espacios. Ej: 5493411234567
+const MINIMO = 15000;
+const P = [{"id": 0, "c": "Almacén", "n": "Aceite girasol El Cortijo 900 cc", "p": 2800, "i": "img/aceite-el-cortijo-900cc.webp"}, {"id": 1, "c": "Almacén", "n": "Aceite girasol Zanoni 900 cc", "p": 3550, "i": "img/zanoni-900cc.webp"}, {"id": 2, "c": "Almacén", "n": "Harina Brunin 000 1 kg", "p": 850, "i": "img/brunin-000.webp"}, {"id": 3, "c": "Almacén", "n": "Harina Brunin 0000 1 kg", "p": 1000, "i": "img/brunin-0000.webp"}, {"id": 4, "c": "Almacén", "n": "Harina Brunin Leudante 1 kg", "p": 1250, "i": "img/brunin-leud.webp"}, {"id": 5, "c": "Almacén", "n": "Fideos Favorita Spaghetti 500 g", "p": 900, "i": "img/favorita-spaghetti.webp"}, {"id": 6, "c": "Almacén", "n": "Fideos Favorita Mostachol 500 g", "p": 900, "i": "img/favorita-mostachol.webp"}, {"id": 7, "c": "Almacén", "n": "Fideos Don Guido Codito 500 g", "p": 700, "i": "img/don-guido-codito.webp"}, {"id": 8, "c": "Almacén", "n": "Fideos Don Guido Tirabuzón 500 g", "p": 700, "i": "img/don-guido-tirabuzon.webp"}, {"id": 9, "c": "Almacén", "n": "Fideos Don Guido Spaghetti 500 g", "p": 700, "i": "img/spaguetti-don-guido.webp"}, {"id": 10, "c": "Almacén", "n": "Fideos Don Guido Mostachol 500 g", "p": 700, "i": "img/mostachol.webp"}, {"id": 11, "c": "Almacén", "n": "Arroz Trimacer largo fino 500 g", "p": 900, "i": "img/trimacer.webp"}, {"id": 12, "c": "Almacén", "n": "Puré de tomate De la Huerta 530 g", "p": 1000, "i": "img/pure-de-tomate-la-huerta-530gr.webp"}, {"id": 13, "c": "Almacén", "n": "Puré de tomate Arcor brik 520 g", "p": 1050, "i": "img/arcor.webp"}, {"id": 14, "c": "Almacén", "n": "Atún en trozos al natural Gomes da Costa 170 g", "p": 4000, "i": "img/atun-gomes.webp"}, {"id": 15, "c": "Almacén", "n": "Sal fina 500 g", "p": 1500, "i": "img/sal-celusan-500gr.webp"}, {"id": 16, "c": "Almacén", "n": "Mayonesa Hellmann's doypack 237 g", "p": 1700, "i": "img/mayonesa.webp"}, {"id": 17, "c": "Desayuno y merienda", "n": "Yerba Playadito 500 g", "p": 2650, "i": "img/yerba-playadito-500gr.webp"}, {"id": 18, "c": "Desayuno y merienda", "n": "Yerba Amanda 500 g", "p": 2050, "i": "img/yerba-amanda-500gr.webp"}, {"id": 19, "c": "Desayuno y merienda", "n": "Café La Virginia Doy Pack 100 g Clásico", "p": 5250, "i": "img/cafe-clasico.webp"}, {"id": 20, "c": "Desayuno y merienda", "n": "Café La Virginia Doy Pack 100 g Suave", "p": 5250, "i": "img/cafe-suave.webp"}, {"id": 21, "c": "Desayuno y merienda", "n": "Té La Virginia x25", "p": 900, "i": "img/te25.webp"}, {"id": 22, "c": "Desayuno y merienda", "n": "Té La Virginia x50", "p": 2000, "i": "img/te50.webp"}, {"id": 23, "c": "Desayuno y merienda", "n": "Azúcar Bulnez 1 kg", "p": 1350, "i": "img/bulnez.webp"}, {"id": 24, "c": "Limpieza", "n": "Lavandina Querubín 1 L", "p": 1400, "i": "img/querubin.webp"}, {"id": 25, "c": "Limpieza", "n": "Detergente Magistral 300 ml", "p": 2850, "i": "img/destergente-magistral-300ml.webp"}, {"id": 26, "c": "Limpieza", "n": "Detergente Cif Bioactive Lima 300 ml", "p": 1850, "i": "img/cif-bioactive.webp"}, {"id": 27, "c": "Limpieza", "n": "Jabón líquido Ala Matic 500 ml para diluir", "p": 11150, "i": "img/ala500.webp"}, {"id": 28, "c": "Limpieza", "n": "Jabón líquido Ala Eco con bicarbonato 500 ml para diluir", "p": 11150, "i": "img/ala-eco.webp"}, {"id": 29, "c": "Limpieza", "n": "Suavizante Ecovita Único 900 ml", "p": 2950, "i": "img/ecovita-unico.webp"}, {"id": 30, "c": "Limpieza", "n": "Suavizante Ecovita Orquídeas 900 ml", "p": 2500, "i": "img/ecovita-orq.webp"}, {"id": 31, "c": "Limpieza", "n": "Limpiador Poett Frescura de lavanda 900 ml", "p": 2550, "i": "img/poett-lavanda.webp"}, {"id": 32, "c": "Limpieza", "n": "Limpiador Poett Alegra tu día 900 ml", "p": 2550, "i": "img/poett-alegra.webp"}, {"id": 33, "c": "Limpieza", "n": "Cif baño 450 ml", "p": 2900, "i": "img/cif.webp"}, {"id": 34, "c": "Papel e higiene", "n": "Papel higiénico Elegante 4 rollos x 30 m", "p": 1800, "i": "img/elegante-papel-higienico-4-x-30mts.webp"}, {"id": 35, "c": "Papel e higiene", "n": "Rollo de cocina x3", "p": 2100, "i": "img/rollo.webp"}, {"id": 36, "c": "Papel e higiene", "n": "Jabón de tocador Lux Botanicals Rosas francesas 120 g", "p": 1650, "i": "img/lux-rosas.webp"}, {"id": 37, "c": "Papel e higiene", "n": "Jabón de tocador Lux Botanicals Orquídea negra 120 g", "p": 1650, "i": "img/lux-orq.webp"}, {"id": 38, "c": "Papel e higiene", "n": "Jabón de tocador Plusbelle Coco x3 (120 g c/u)", "p": 4350, "i": "img/plusbelle.webp"}, {"id": 39, "c": "Papel e higiene", "n": "Crema dental Colgate Triple Acción 90 g", "p": 4150, "i": "img/colgate-ta.webp"}, {"id": 40, "c": "Papel e higiene", "n": "Crema dental Colgate Máxima Protección 90 g", "p": 3500, "i": "img/colgate.webp"}, {"id": 41, "c": "Papel e higiene", "n": "Antitranspirante en crema Rexona Odorono", "p": 2500, "i": "img/odorono.webp"}, {"id": 42, "c": "Bebidas", "n": "Coca-Cola Regular 2 L retornable", "p": 3700, "i": "img/coca.webp"}, {"id": 43, "c": "Bebidas", "n": "Fanta 2 L retornable", "p": 3700, "i": "img/fanta.webp"}, {"id": 44, "c": "Bebidas", "n": "Sprite 2 L retornable", "p": 3700, "i": "img/sprite.webp"}, {"id": 45, "c": "Bebidas", "n": "Soda sifón 2 L", "p": 1500, "i": "img/soda.webp"}];
+const cats = [...new Set(P.map(p=>p.c))];
+const cart = {};
+let cat = "Todo", q = "", zid = null, sugIds = null;
+const CART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.2a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H6"/></svg>`;
+function zoomctl(){const p=P[zid],n=cart[zid]||0;$("#zctl").innerHTML=n?`<div class="step"><button type="button" data-m="${zid}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-a="${zid}" aria-label="Agregar uno">+</button></div>`:`<button type="button" class="add" data-a="${zid}">${CART} Comprar</button>`}
+const $ = s=>document.querySelector(s);
+const fmt = n=>"$ "+n.toLocaleString("es-AR");
+function tabs(){
+  $("#tabs").innerHTML = ["Todo",...cats].map(c=>`<button type="button" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+}
+function card(p){
+  const n = cart[p.id]||0;
+  const pic = p.i ? `<img src="${p.i}" alt="${p.n}" loading="lazy">` : `<span class="ph" aria-hidden="true">${p.n[0]}</span>`;
+  const picbtn = p.i ? `<button type="button" class="pic" data-v="${p.id}" aria-label="Ver foto grande de ${p.n}">${pic}</button>` : `<div class="pic">${pic}</div>`;
+  const ctl = n ? `<div class="step"><button type="button" data-m="${p.id}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-a="${p.id}" aria-label="Agregar uno">+</button></div>`
+               : `<button type="button" class="add" data-a="${p.id}">${CART} Comprar</button>`;
+  return `<article class="card">${picbtn}<div class="name">${p.n}</div><div class="row"><div><span class="price">${fmt(p.p)}</span><div class="unit">por unidad</div></div>${ctl}</div></article>`;
+}
+function render(){
+  const qq = q.trim().toLowerCase();
+  let html = "";
+  for(const c of cats){
+    if(cat!=="Todo" && c!==cat) continue;
+    const list = P.filter(p=>p.c===c && (!qq || p.n.toLowerCase().includes(qq)));
+    if(!list.length) continue;
+    html += `<h2>${c}</h2><div class="grid">${list.map(card).join("")}</div>`;
+  }
+  $("#list").innerHTML = html || `<p class="empty">No encontramos ese producto. Escribinos y lo conseguimos.</p>`;
+  const items = Object.entries(cart).filter(([,n])=>n>0);
+  const total = items.reduce((s,[id,n])=>s+P[id].p*n,0);
+  const units = items.reduce((s,[,n])=>s+n,0);
+  $("#count").textContent = units ? `${units} ${units===1?"producto":"productos"}` : "Tu pedido está vacío";
+  $("#total").textContent = fmt(total);
+  $("#open").disabled = !units;
+  $("#open").classList.toggle("ready",total>=MINIMO);
+  $("#open").classList.toggle("low",units>0&&total<MINIMO);
+  $("#lines").innerHTML = items.map(([id,n])=>`<div class="line"><span>${P[id].n}<br><small>${fmt(P[id].p*n)}</small></span><span class="q"><button type="button" data-m="${id}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-a="${id}" aria-label="Agregar uno">+</button></span></div>`).join("");
+  const SUG=["Lavandina","Papel higiénico 4 rollos","Azúcar Chango","Leche","Fideos Lucchetti","Puré de tomate De la Huerta","Detergente Magistral","Rollo de cocina","Yerba Playadito","Aceite girasol El Cortijo"];
+  if(sugIds===null) sugIds=SUG.map(s=>P.find(p=>p.n.startsWith(s))).filter(p=>p&&!cart[p.id]).slice(0,2).map(p=>p.id);
+  const sug=sugIds.map(id=>P[id]).filter(p=>!cart[p.id]);
+  $("#sug").innerHTML = sug.length ? `<div class="sug"><h4>¿Te olvidaste algo?</h4><div class="sugrow">${sug.map(p=>`<div class="sugi">${p.i?`<img src="${p.i}" alt="">`:`<span class="ph">${p.n[0]}</span>`}<div class="t">${p.n}<span>${fmt(p.p)}</span></div><button type="button" data-a="${p.id}" aria-label="Agregar ${p.n}">+</button></div>`).join("")}</div></div>` : "";
+  $("#total2").textContent = fmt(total);
+  const m = $("#min");
+  m.hidden = total>=MINIMO;
+  m.textContent = `El pedido mínimo es de ${fmt(MINIMO)}. Te faltan ${fmt(Math.max(0,MINIMO-total))}.`;
+  $("#send").disabled = total<MINIMO;
+  const pr=$("#prog"); pr.classList.toggle("ok",total>=MINIMO);
+  $("#fill").style.width=Math.min(100,total/MINIMO*100)+"%";
+  $("#progtxt").textContent = !units ? `Pedido mínimo ${fmt(MINIMO)}` : total>=MINIMO ? `Listo, llegaste al mínimo. Tocá "Finalizar pedido" para enviarlo.` : `Te faltan ${fmt(MINIMO-total)} para el pedido mínimo de ${fmt(MINIMO)}`;
+  if(zid!==null) zoomctl();
+}
+function message(){
+  const items = Object.entries(cart).filter(([,n])=>n>0);
+  const total = items.reduce((s,[id,n])=>s+P[id].p*n,0);
+  let t = "Hola SuperGo! Quiero hacer este pedido:\n\n";
+  t += items.map(([id,n])=>`• ${n} x ${P[id].n} — ${fmt(P[id].p*n)}`).join("\n");
+  t += `\n\nTotal: ${fmt(total)}`;
+  const nom=$("#nom").value.trim(), dir=$("#dir").value.trim(), obs=$("#obs").value.trim();
+  if(nom) t+=`\nNombre: ${nom}`;
+  const tel=$("#tel").value.trim();
+  if(tel) t+=`\nTeléfono: ${tel}`;
+  if(dir) t+=`\nDirección: ${dir}`;
+  t+=`\nPago: ${$("#pago").value}`;
+  if(obs) t+=`\nCómo encontrar la casa: ${obs}`;
+  return t;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.c){cat=b.dataset.c;tabs();render();window.scrollTo({top:0});return}
+  if(b.dataset.v){zid=+b.dataset.v;const p=P[zid];$("#zimg").src=p.i;$("#zimg").alt=p.n;$("#zname").textContent=p.n;$("#zprice").textContent=fmt(p.p);zoomctl();$("#zoom").hidden=false;return}
+  if(b.id==="zclose"){$("#zoom").hidden=true;zid=null;return}
+  if(b.dataset.a){cart[b.dataset.a]=(cart[b.dataset.a]||0)+1;render();return}
+  if(b.dataset.m){cart[b.dataset.m]=Math.max(0,(cart[b.dataset.m]||0)-1);render();return}
+  if(b.id==="open"){sugIds=null;
+    const tot=Object.entries(cart).reduce((s,[id,n])=>s+P[id].p*n,0);
+    if(tot<MINIMO){const ts=$("#toast");ts.textContent=`Te faltan ${fmt(MINIMO-tot)} para llegar al pedido mínimo de ${fmt(MINIMO)}. Sumá algunos productos más.`;ts.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>ts.hidden=true,3500);return}render();$("#sheet").hidden=false;return}
+  if(b.id==="close"||b.id==="close2"){$("#sheet").hidden=true;return}
+  if(b.id==="send"){
+    const req=[["nom","tu nombre"],["tel","tu teléfono"],["dir","tu dirección de entrega"],["pago","la forma de pago"]];
+    const miss=req.filter(([id])=>!$("#"+id).value.trim());
+    req.forEach(([id])=>$("#"+id).classList.toggle("bad",!$("#"+id).value.trim()));
+    if(miss.length){const f=$("#faltan");f.textContent="Falta completar: "+miss.map(m=>m[1]).join(", ")+".";f.hidden=false;const el=$("#"+miss[0][0]);el.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>el.focus(),300);return}
+    $("#faltan").hidden=true;
+    const url=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message())}`;
+    const a=document.createElement("a");a.href=url;a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();return}
+  if(b.id==="copy"){
+    const t=message();
+    navigator.clipboard.writeText(t).then(()=>{$("#copied").hidden=false}).catch(()=>{$("#obs").value=t;$("#obs").select();$("#copied").hidden=false});
+  }
+});
+$("#zoom").addEventListener("click",e=>{if(e.target.id==="zoom"){$("#zoom").hidden=true;zid=null}});
+$("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")$("#sheet").hidden=true});
+["nom","tel","dir","pago"].forEach(id=>$("#"+id).addEventListener(id==="pago"?"change":"input",e=>e.target.classList.remove("bad")));
+$("#q").addEventListener("input",e=>{q=e.target.value;render()});
+$("#open").innerHTML=CART+" Finalizar pedido";
+tabs();render();
+</script>
