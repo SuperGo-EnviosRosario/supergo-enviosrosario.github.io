@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="es-AR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Pedí hoy, recibí hoy. Delivery de súper por WhatsApp en Rosario. Envío sin cargo.">
+<meta name="description" content="Pedí hoy, recibí hoy. Delivery de súper por WhatsApp en Rosario. Envío gratis desde $15.000.">
 <meta name="theme-color" content="#1f6b45">
 <meta property="og:type" content="website"><meta property="og:url" content="https://supergo-enviosrosario.github.io/">
 <meta property="og:title" content="SuperGo · Tu súper, sin salir de casa">
-<meta property="og:description" content="Pedí hoy, recibí hoy. Envío sin cargo en Rosario. Mirá los productos y precios y hacé tu pedido por WhatsApp.">
+<meta property="og:description" content="Pedí hoy, recibí hoy. Envío gratis desde $15.000 en Rosario. Mirá los productos y precios y hacé tu pedido por WhatsApp.">
 <meta property="og:image" content="https://supergo-enviosrosario.github.io/img/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_AR"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="img/icon-192.png"><link rel="apple-touch-icon" href="img/icon-180.png"><link rel="manifest" href="manifest.webmanifest">
@@ -125,14 +125,14 @@ label{display:block;font-weight:600;font-size:.88rem;margin-top:12px}
 
 <header class="wrap">
   <div class="brand"><h1 class="logo"><img src="img/logo.webp" alt="SuperGo. Pedí hoy, recibí hoy"></h1><p class="slogan">Tu súper, sin salir de casa.</p></div>
-  <div class="info"><span>Pedidos hasta las 14 h, entrega en el día</span><span>Envíos sin cargo, zona Rosario</span><span>Pagás al recibir o por transferencia</span></div>
+  <div class="info"><span>Pedidos hasta las 14 h, entrega en el día</span><span>Envío GRATIS desde $ 15.000 · Rosario</span><span>Pagás al recibir o por transferencia</span></div>
   <div class="links"><a id="wa" href="#" target="_blank" rel="noopener">💬 ¿Tenés una duda? Escribinos</a><button id="inst" type="button" hidden>📲 Agregar SuperGo a mi celular</button></div>
   <div class="again" id="again" hidden><p>¿Repetís tu último pedido?<small id="againtxt"></small></p><button type="button" id="repeat">Repetir pedido</button></div>
 </header>
 <nav><div class="wrap"><div class="tabs" id="tabs" role="toolbar" aria-label="Categorías"></div><input id="q" class="search" type="search" placeholder="Buscar producto (yerba, fideos, lavandina…)" aria-label="Buscar producto"></div></nav>
 <main class="wrap" id="list"></main>
 
-<div class="bar"><div class="prog" id="prog"><span id="progtxt">Pedido mínimo $ 15.000</span><div class="track"><div class="fill" id="fill"></div></div></div><div class="in"><div class="tot"><div id="count">Tu pedido está vacío</div><strong id="total">$ 0</strong></div><button class="cta" id="open" disabled>Ver pedido</button></div></div>
+<div class="bar"><div class="prog" id="prog"><span id="progtxt">Envío GRATIS desde $ 15.000</span><div class="track"><div class="fill" id="fill"></div></div></div><div class="in"><div class="tot"><div id="count">Tu pedido está vacío</div><strong id="total">$ 0</strong></div><button class="cta" id="open" disabled>Ver pedido</button></div></div>
 
 <div class="toast" id="toast" hidden role="status"></div>
 <div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Producto"><div class="zbox"><img id="zimg" alt=""><div class="zn" id="zname"></div><div class="row"><div><span class="price" id="zprice"></span><div class="unit">por unidad</div></div><div id="zctl"></div></div><button class="ghost" id="zclose" type="button">Cerrar</button></div></div>
@@ -140,6 +140,7 @@ label{display:block;font-weight:600;font-size:.88rem;margin-top:12px}
   <div class="panel" role="dialog" aria-modal="true" aria-labelledby="ttl">
     <div class="phead"><h3 id="ttl">Tu pedido</h3><button class="more xbtn" id="close2" type="button">+ Sumar productos</button></div>
     <div id="lines"></div>
+    <div class="line" id="envline" hidden><span>Envío</span><span id="envio">$ 0</span></div>
     <div class="line"><strong>Total</strong><strong id="total2">$ 0</strong></div>
     <div id="sug"></div>
     <div id="min" class="warn" hidden></div>
@@ -156,7 +157,9 @@ label{display:block;font-weight:600;font-size:.88rem;margin-top:12px}
 
 <script>
 const WHATSAPP = "5493416747854"; // número de SuperGo con código de país, sin + ni espacios. Ej: 5493411234567
-const MINIMO = 15000;
+const MINIMO = 15000; // envío gratis desde acá
+const ENVIO = 2000; // costo de envío si no llega a MINIMO
+const MIN_ABS = 5000; // mínimo oculto: solo se avisa si no llega
 const P = [{"id": 0, "c": "Almacén", "n": "Aceite girasol El Cortijo 900 cc", "p": 2800, "i": "img/aceite-el-cortijo-900cc.webp"}, {"id": 1, "c": "Almacén", "n": "Aceite girasol Zanoni 900 cc", "p": 3550, "i": "img/zanoni-900cc.webp"}, {"id": 2, "c": "Almacén", "n": "Harina Brunin 000 1 kg", "p": 850, "i": "img/brunin-000.webp"}, {"id": 3, "c": "Almacén", "n": "Harina Brunin 0000 1 kg", "p": 1000, "i": "img/brunin-0000.webp"}, {"id": 4, "c": "Almacén", "n": "Harina Brunin Leudante 1 kg", "p": 1250, "i": "img/brunin-leud.webp"}, {"id": 5, "c": "Almacén", "n": "Fideos Favorita Spaghetti 500 g", "p": 900, "i": "img/favorita-spaghetti.webp"}, {"id": 6, "c": "Almacén", "n": "Fideos Favorita Mostachol 500 g", "p": 900, "i": "img/favorita-mostachol.webp"}, {"id": 7, "c": "Almacén", "n": "Fideos Don Guido Codito 500 g", "p": 700, "i": "img/don-guido-codito.webp"}, {"id": 8, "c": "Almacén", "n": "Fideos Don Guido Tirabuzón 500 g", "p": 700, "i": "img/don-guido-tirabuzon.webp"}, {"id": 9, "c": "Almacén", "n": "Fideos Don Guido Spaghetti 500 g", "p": 700, "i": "img/spaguetti-don-guido.webp"}, {"id": 10, "c": "Almacén", "n": "Fideos Don Guido Mostachol 500 g", "p": 700, "i": "img/mostachol.webp"}, {"id": 11, "c": "Almacén", "n": "Arroz Trimacer largo fino 500 g", "p": 900, "i": "img/trimacer.webp"}, {"id": 12, "c": "Almacén", "n": "Puré de tomate De la Huerta 530 g", "p": 1000, "i": "img/pure-de-tomate-la-huerta-530gr.webp"}, {"id": 13, "c": "Almacén", "n": "Puré de tomate Arcor brik 520 g", "p": 1050, "i": "img/arcor.webp"}, {"id": 14, "c": "Almacén", "n": "Atún en trozos al natural Gomes da Costa 170 g", "p": 4000, "i": "img/atun-gomes.webp"}, {"id": 15, "c": "Almacén", "n": "Sal fina 500 g", "p": 1500, "i": "img/sal-celusan-500gr.webp"}, {"id": 16, "c": "Almacén", "n": "Mayonesa Hellmann's doypack 237 g", "p": 1700, "i": "img/mayonesa.webp"}, {"id": 17, "c": "Desayuno y merienda", "n": "Yerba Playadito 500 g", "p": 2650, "i": "img/yerba-playadito-500gr.webp"}, {"id": 18, "c": "Desayuno y merienda", "n": "Yerba Amanda Tradicional 500 g", "p": 2200, "i": "img/yerba-amanda-500gr.webp"}, {"id": 19, "c": "Desayuno y merienda", "n": "Café La Virginia Doy Pack 100 g Clásico", "p": 5250, "i": "img/cafe-clasico.webp"}, {"id": 20, "c": "Desayuno y merienda", "n": "Café La Virginia Doy Pack 100 g Suave", "p": 5250, "i": "img/cafe-suave.webp"}, {"id": 21, "c": "Desayuno y merienda", "n": "Té La Virginia x25", "p": 900, "i": "img/te25.webp"}, {"id": 22, "c": "Desayuno y merienda", "n": "Té La Virginia x50", "p": 2000, "i": "img/te50.webp"}, {"id": 23, "c": "Desayuno y merienda", "n": "Azúcar Bulnez 1 kg", "p": 1350, "i": "img/bulnez.webp"}, {"id": 24, "c": "Limpieza", "n": "Lavandina Querubín 1 L", "p": 1400, "i": "img/querubin.webp"}, {"id": 25, "c": "Limpieza", "n": "Detergente Magistral 300 ml", "p": 2850, "i": "img/destergente-magistral-300ml.webp"}, {"id": 26, "c": "Limpieza", "n": "Detergente Cif Bioactive Lima 300 ml", "p": 1850, "i": "img/cif-bioactive.webp"}, {"id": 27, "c": "Limpieza", "n": "Jabón líquido Ala Matic 500 ml para diluir", "p": 11150, "i": "img/ala500.webp"}, {"id": 28, "c": "Limpieza", "n": "Jabón líquido Ala Eco con bicarbonato 500 ml para diluir", "p": 11150, "i": "img/ala-eco.webp"}, {"id": 29, "c": "Limpieza", "n": "Suavizante Ecovita Único 900 ml", "p": 2950, "i": "img/ecovita-unico.webp"}, {"id": 30, "c": "Limpieza", "n": "Suavizante Ecovita Orquídeas 900 ml", "p": 2500, "i": "img/ecovita-orq.webp"}, {"id": 31, "c": "Limpieza", "n": "Limpiador Poett Frescura de lavanda 900 ml", "p": 2550, "i": "img/poett-lavanda.webp"}, {"id": 32, "c": "Limpieza", "n": "Limpiador Poett Alegra tu día 900 ml", "p": 2550, "i": "img/poett-alegra.webp"}, {"id": 33, "c": "Limpieza", "n": "Cif baño 450 ml", "p": 2900, "i": "img/cif.webp"}, {"id": 34, "c": "Papel e higiene", "n": "Papel higiénico Elegante 4 rollos x 30 m", "p": 1800, "i": "img/elegante-papel-higienico-4-x-30mts.webp"}, {"id": 35, "c": "Papel e higiene", "n": "Rollo de cocina x3", "p": 2100, "i": "img/rollo.webp"}, {"id": 36, "c": "Papel e higiene", "n": "Jabón de tocador Lux Botanicals Rosas francesas 120 g", "p": 1650, "i": "img/lux-rosas.webp"}, {"id": 37, "c": "Papel e higiene", "n": "Jabón de tocador Lux Botanicals Orquídea negra 120 g", "p": 1650, "i": "img/lux-orq.webp"}, {"id": 38, "c": "Papel e higiene", "n": "Jabón de tocador Plusbelle Coco x3 (120 g c/u)", "p": 4350, "i": "img/plusbelle.webp"}, {"id": 39, "c": "Papel e higiene", "n": "Crema dental Colgate Triple Acción 90 g", "p": 4150, "i": "img/colgate-ta.webp"}, {"id": 40, "c": "Papel e higiene", "n": "Crema dental Colgate Máxima Protección 90 g", "p": 3500, "i": "img/colgate.webp"}, {"id": 41, "c": "Papel e higiene", "n": "Antitranspirante en crema Rexona Odorono", "p": 2500, "i": "img/odorono.webp"}, {"id": 42, "c": "Bebidas", "n": "Coca-Cola Regular 2 L retornable", "p": 3700, "i": "img/coca.webp"}, {"id": 43, "c": "Bebidas", "n": "Fanta 2 L retornable", "p": 3700, "i": "img/fanta.webp"}, {"id": 44, "c": "Bebidas", "n": "Sprite 2 L retornable", "p": 3700, "i": "img/sprite.webp"}, {"id": 45, "c": "Bebidas", "n": "Soda sifón 2 L", "p": 1500, "i": "img/soda.webp"}];
 const cats = [...new Set(P.map(p=>p.c))];
 const cart = {};
@@ -193,20 +196,23 @@ function render(){
   $("#total").textContent = fmt(total);
   $("#open").disabled = !units;
   $("#open").classList.toggle("ready",total>=MINIMO);
-  $("#open").classList.toggle("low",units>0&&total<MINIMO);
+  $("#open").classList.toggle("low",units>0&&total<MIN_ABS);
   $("#lines").innerHTML = items.map(([id,n])=>`<div class="line"><span>${P[id].n}<br><small>${fmt(P[id].p*n)}</small></span><span class="q"><button type="button" data-m="${id}" aria-label="Quitar uno">−</button><b>${n}</b><button type="button" data-a="${id}" aria-label="Agregar uno">+</button></span></div>`).join("");
   const SUG=["Lavandina","Papel higiénico 4 rollos","Azúcar Chango","Leche","Fideos Lucchetti","Puré de tomate De la Huerta","Detergente Magistral","Rollo de cocina","Yerba Playadito","Aceite girasol El Cortijo"];
   if(sugIds===null) sugIds=SUG.map(s=>P.find(p=>p.n.startsWith(s))).filter(p=>p&&!cart[p.id]).slice(0,2).map(p=>p.id);
   const sug=sugIds.map(id=>P[id]).filter(p=>!cart[p.id]);
   $("#sug").innerHTML = sug.length ? `<div class="sug"><h4>¿Te olvidaste algo?</h4><div class="sugrow">${sug.map(p=>`<div class="sugi">${p.i?`<img src="${p.i}" alt="">`:`<span class="ph">${p.n[0]}</span>`}<div class="t">${p.n}<span>${fmt(p.p)}</span></div><button type="button" data-a="${p.id}" aria-label="Agregar ${p.n}">+</button></div>`).join("")}</div></div>` : "";
-  $("#total2").textContent = fmt(total);
+  const env = total>=MINIMO ? 0 : ENVIO;
+  $("#envline").hidden = !units;
+  $("#envio").textContent = env ? fmt(env) : "GRATIS";
+  $("#total2").textContent = fmt(total+env);
   const m = $("#min");
   m.hidden = total>=MINIMO;
-  m.textContent = `El pedido mínimo es de ${fmt(MINIMO)}. Te faltan ${fmt(Math.max(0,MINIMO-total))}.`;
-  $("#send").disabled = total<MINIMO;
+  m.textContent = total<MIN_ABS ? `Para hacer un pedido necesitás sumar al menos ${fmt(MIN_ABS)} en productos. Te faltan ${fmt(MIN_ABS-total)}.` : `⚠️ Tu pedido es menor a ${fmt(MINIMO)}, así que se suma ${fmt(ENVIO)} de envío. Sumá ${fmt(MINIMO-total)} más y el envío es GRATIS.`;
+  $("#send").disabled = total<MIN_ABS;
   const pr=$("#prog"); pr.classList.toggle("ok",total>=MINIMO);
   $("#fill").style.width=Math.min(100,total/MINIMO*100)+"%";
-  $("#progtxt").textContent = !units ? `Pedido mínimo ${fmt(MINIMO)}` : total>=MINIMO ? `Listo, llegaste al mínimo. Tocá "Finalizar pedido" para enviarlo.` : `Te faltan ${fmt(MINIMO-total)} para el pedido mínimo de ${fmt(MINIMO)}`;
+  $("#progtxt").textContent = !units ? `Envío GRATIS desde ${fmt(MINIMO)}` : total>=MINIMO ? `¡Tenés envío GRATIS! Tocá "Finalizar pedido" para enviarlo.` : `Te faltan ${fmt(MINIMO-total)} para el envío GRATIS`;
   if(zid!==null) zoomctl();
 }
 function message(){
@@ -214,7 +220,10 @@ function message(){
   const total = items.reduce((s,[id,n])=>s+P[id].p*n,0);
   let t = "Hola SuperGo! Quiero hacer este pedido:\n\n";
   t += items.map(([id,n])=>`• ${n} x ${P[id].n} — ${fmt(P[id].p*n)}`).join("\n");
-  t += `\n\nTotal: ${fmt(total)}`;
+  const env = total>=MINIMO ? 0 : ENVIO;
+  t += `\n\nProductos: ${fmt(total)}`;
+  t += `\nEnvío: ${env?fmt(env):"GRATIS"}`;
+  t += `\nTotal: ${fmt(total+env)}`;
   const nom=$("#nom").value.trim(), dir=$("#dir").value.trim(), obs=$("#obs").value.trim();
   if(nom) t+=`\nNombre: ${nom}`;
   const tel=$("#tel").value.trim();
@@ -235,7 +244,7 @@ document.addEventListener("click",e=>{
   if(b.dataset.m){cart[b.dataset.m]=Math.max(0,(cart[b.dataset.m]||0)-1);render();return}
   if(b.id==="open"){sugIds=null;
     const tot=Object.entries(cart).reduce((s,[id,n])=>s+P[id].p*n,0);
-    if(tot<MINIMO){const ts=$("#toast");ts.textContent=`Te faltan ${fmt(MINIMO-tot)} para llegar al pedido mínimo de ${fmt(MINIMO)}. Sumá algunos productos más.`;ts.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>ts.hidden=true,3500);return}render();$("#sheet").hidden=false;return}
+    if(tot<MIN_ABS){const ts=$("#toast");ts.textContent=`Para hacer un pedido necesitás sumar al menos ${fmt(MIN_ABS)} en productos. Te faltan ${fmt(MIN_ABS-tot)}.`;ts.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>ts.hidden=true,3500);return}render();$("#sheet").hidden=false;return}
   if(b.id==="close"||b.id==="close2"){$("#sheet").hidden=true;return}
   if(b.id==="send"){
     const req=[["nom","tu nombre"],["tel","tu teléfono"],["dir","tu dirección de entrega"],["pago","la forma de pago"]];
